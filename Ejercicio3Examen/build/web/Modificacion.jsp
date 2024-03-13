@@ -11,6 +11,7 @@
     <body>
         <%
             ArrayList<Constructor> ArrayCredito = (ArrayList<Constructor>) session.getAttribute("credito");
+            ArrayList<Constructor> ArrayModif = new ArrayList<>();
             Connection conexion = null;
 
             try {
@@ -29,7 +30,25 @@
                 } else {
                     out.println("No se encontraron datos de crédito para mostrar.");
                 }
-            } catch (Exception e) {
+                
+                
+            
+                Statement statement = conexion.createStatement();
+                ResultSet result = statement.executeQuery("SELECT Pais, COUNT(*) AS NumeroClientes,  ROUND(AVG(LimiteCredito), 2) AS MediaCredito FROM Clientes2 GROUP BY Pais");
+
+                while (result.next()) {
+                    String pais = result.getString("Pais");
+                    int numeroClientes = result.getInt("NumeroClientes");
+                    double mediaLimiteCredito = result.getDouble("MediaCredito");
+
+                    Constructor constructor = new Constructor(pais, numeroClientes, mediaLimiteCredito);
+                    ArrayModif.add(constructor);
+                    
+                }
+
+                session.setAttribute("credito", ArrayCredito);
+            
+            }catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 if (conexion != null) {
@@ -47,8 +66,8 @@
                 <th>Número de Clientes</th>
                 <th>Media del Límite de Crédito</th>
             </tr>
-            <% if (ArrayCredito != null) {
-                for (Constructor credito : ArrayCredito) {%>
+            <% if (ArrayModif != null) {
+                for (Constructor credito : ArrayModif) {%>
             <tr>
                 <td><%= credito.getPais()%></td>
                 <td><%= credito.getNumeroClientes()%></td>
