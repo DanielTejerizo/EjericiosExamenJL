@@ -14,6 +14,6 @@
 </head>
 <body>
     <h1>Index</h1>
-    <a href="Calcular.jsp">Ir al segundo paso</a>
+    <a href="Calcular.jsp">Ir a la consulta</a>
 </body>
 </html>

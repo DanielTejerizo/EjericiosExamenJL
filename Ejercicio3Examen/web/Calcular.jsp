@@ -26,7 +26,7 @@
                 conexion = DriverManager.getConnection("jdbc:mysql://localhost/daniel", "Daniel", "Daniel");
 
                 Statement statement = conexion.createStatement();
-                ResultSet result = statement.executeQuery("SELECT Pais, COUNT(*) AS NumeroClientes, AVG(LimiteCredito) AS MediaCredito FROM Clientes2 GROUP BY Pais");
+                ResultSet result = statement.executeQuery("SELECT Pais, COUNT(*) AS NumeroClientes,  ROUND(AVG(LimiteCredito), 2) AS MediaCredito FROM Clientes2 GROUP BY Pais");
 
                 while (result.next()) {
                     String pais = result.getString("Pais");
@@ -35,6 +35,7 @@
 
                     Constructor constructor = new Constructor(pais, numeroClientes, mediaLimiteCredito);
                     ArrayCredito.add(constructor);
+                    
                 }
 
                 session.setAttribute("credito", ArrayCredito);
